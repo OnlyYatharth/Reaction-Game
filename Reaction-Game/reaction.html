@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+    <title>REACTION TESTER</title>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	<script src="anime-master/lib/anime.min.js"></script>
+    
+
+     <style type="text/css">
+		#shape{
+			width : 100px;
+			height : 100px;
+			background-color : #4FA310;
+			display : none;
+			position : relative;
+		}
+		#Container{
+			overflow: hidden;
+		    width : 510px;
+			height : 510px;			}
+		#gameover{
+			display : none;
+		}
+	 </style>
+</head>
+
+<body>
+	<p>SCORE : <span id="score"></span>
+	<div id="Container">
+		<div id="gameover">GAME OVER</div>
+	<div id="shape"></div>
+	</div>
+	<button value="Refresh Page" onClick="window.location.reload();">RESTART</button>
+	<script type="text/javascript">
+	var check;
+	var score = 0;
+	document.getElementById("score").innerHTML = score;
+			
+	var start = new Date().getTime();
+			function getRandomColor() {
+				var letters = '0123456789ABCDEF';
+				var color = '#';
+				for (var i = 0; i < 6; i++) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+			return color;
+			}
+
+		function makeShape(){
+			document.getElementById("shape").style.display = "block";
+			start = new Date().getTime();
+			console.log("new shape created");
+			console.log(new Date());
+			var width = ((Math.random()*150) + 50);
+			document.getElementById("shape").style.top = Math.random()*300 + "px";
+			document.getElementById("shape").style.left = Math.random()*300 + "px";
+			document.getElementById("shape").style.width = width + "px";
+			document.getElementById("shape").style.height = width + "px";
+			var color = getRandomColor();
+			document.getElementById("shape").style.backgroundColor = color;
+			var discolor = color.slice();
+			console.log(discolor);
+			var RED = 16*parseInt(discolor[1],16) + parseInt(discolor[2],16);
+			RED = 255 - RED;
+			console.log(RED);
+			
+			var GREEN = 16*parseInt(discolor[3],16) + parseInt(discolor[4],16);
+			GREEN = 255 - GREEN;
+			console.log(GREEN);
+			
+			var BLUE = 16*parseInt(discolor[5],16) + parseInt(discolor[6],16);
+			BLUE = 255 - BLUE;
+			console.log(BLUE);
+			document.getElementById('Container').style.backgroundColor = 'rgb(' + RED + ',' + GREEN + ',' + BLUE + ')';
+			if(Math.random() > "0.6")
+			{
+			document.getElementById("shape").style.borderRadius = "50%";
+			}
+			else
+			{
+			document.getElementById("shape").style.borderRadius = "0";
+			}
+			check = setTimeout(erase,5000);
+		}
+		function timeDelay(){
+			clearTimeout();
+			setTimeout(makeShape,Math.random()*500);
+		}
+		timeDelay();
+		var c = 0;
+		function erase()
+		{
+			console.log("i am here");
+			console.log(new Date());
+			var warning = 100;
+			score = score - warning;
+			score = Math.floor(score);
+			if(score < 0)
+			{
+				//GAME OVER
+				score = "GAME OVER";
+				c = gameover();
+				
+			}
+			document.getElementById("score").innerHTML = score;
+				
+			document.getElementById("shape").style.display = "none";
+			if(c == 0){
+			timeDelay();
+			}
+			else if(c == 1)
+			{
+					
+			document.getElementById("gameover").style.display = "block";
+				
+			}
+		}
+		function gameover()
+		{
+			console.log("game over");
+			clearTimeout(timeDelay);
+			return 1;
+		}
+			document.getElementById("shape").onclick = function() {
+				clearTimeout(check);
+				document.getElementById("shape").style.display = "none";
+					var end = new Date().getTime();
+					var timeTaken = (end - start)/1000;
+					var scoretemp = (8 - timeTaken)*10;
+					score = score + scoretemp;
+					score = Math.floor(score);
+					document.getElementById("score").innerHTML = score;
+				timeDelay();
+				
+				}
+		anime({
+    	targets: '#shape',
+		translateX: {
+    	value: anime.random(50,250) 	
+  		},
+		translateY: {
+    	value: anime.random(50,250) 	
+  		},
+		rotate : function (){return (anime.random(-360,360))},
+		duration : function() {return (anime.random(800,1500))},
+		easing: 'easeInOutSine',
+  		direction: 'alternate',
+  		loop: true
+				});
+		</script>
+</body>
+</html> 
